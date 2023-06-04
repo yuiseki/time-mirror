@@ -5,6 +5,7 @@ function App() {
   const [recording, setRecording] = useState(false);
   const [recordedChunks, setRecordedChunks] = useState([]);
   const [isPlaying, setPlaying] = useState(false);
+  const [interval, setInterval] = useState(1000); // 10 minutes
   const recordedVideoRef = useRef();
   let mediaRecorder = useRef(null);
 
@@ -48,7 +49,7 @@ function App() {
     let currentTime = recordedVideoRef.current.currentTime;
     recordedVideoRef.current.src = url;
     recordedVideoRef.current.currentTime = currentTime;
-  }, isPlaying ? 1000 : null); // 10 minutes
+  }, isPlaying ? interval : null); 
 
   return (
     <div className="App">
@@ -60,6 +61,13 @@ function App() {
       <button onClick={handlePiP} disabled={!recording}>
         {'Picture-in-Picture Mode'}
       </button>
+      <br />
+      <select onChange={(e) => setInterval(e.target.value)}>
+        <option value={1000}>1秒</option>
+        <option value={1000*60}>1分</option>
+        <option value={1000*60*5}>5分</option>
+        <option value={1000*60*10}>10分</option>
+      </select>
       <h2>作業映像</h2>
       <video ref={recordedVideoRef} style={{"maxWidth": "50%"}} autoPlay controls></video>
       <p>この映像はインターネットに配信されていないので、あなたしか見ることは出来ません。</p>
